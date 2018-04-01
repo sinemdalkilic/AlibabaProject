@@ -160,6 +160,50 @@ tr_sc_brand[brand_id==659 & sub_category_id==376, cumservicescore:=cumsum(servic
 tr_sc_brand[brand_id==609 & sub_category_id==285, cumservicescore:=cumsum(servicescore)/(1:.N)]
 tr_sc_brand[brand_id==285 & sub_category_id==250, cumservicescore:=cumsum(servicescore)/(1:.N)]
 
+tr_sc_brand[brand_id!=232 & sub_category_id==250,maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=345 & sub_category_id==365, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==9, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==44, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==117, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==376, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==69, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==117, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==250, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==376, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=850 & sub_category_id==117, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=659 & sub_category_id==376, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==285, maxprice:=max(price) ,by=.(date)]
+tr_sc_brand[brand_id!=285 & sub_category_id==250, maxprice:=max(price) ,by=.(date)]
+
+tr_sc_brand[brand_id!=232 & sub_category_id==250,minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=345 & sub_category_id==365, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==9, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==44, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==117, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==376, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==69, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==117, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==250, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==376, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=850 & sub_category_id==117, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=659 & sub_category_id==376, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==285, minprice:=min(price) ,by=.(date)]
+tr_sc_brand[brand_id!=285 & sub_category_id==250, minprice:=min(price) ,by=.(date)]
+
+tr_sc_brand[brand_id!=232 & sub_category_id==250,avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=345 & sub_category_id==365, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==9, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==44, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==117, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==376, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==69, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==117, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==250, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=773 & sub_category_id==376, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=850 & sub_category_id==117, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=659 & sub_category_id==376, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=609 & sub_category_id==285, avgprice:=mean(price) ,by=.(date)]
+tr_sc_brand[brand_id!=285 & sub_category_id==250, avgprice:=mean(price) ,by=.(date)]
 
 #Datamýz artýk hazýr. Yaþasýn :)
 
@@ -168,7 +212,7 @@ tr_sc_brand[brand_id==285 & sub_category_id==250, cumservicescore:=cumsum(servic
 data<-tr_sc_brand[brand_id==232 & sub_category_id==250,]
 #lagged data
 #datayı bozmamak için temp üzerinde değişiklik yaptım
-temp=tr_sc_brand[sub_category_id==250 & brand_id==232,]
+temp=unique(tr_sc_brand[sub_category_id==250 & brand_id==232,])
 temp[,view := shift(view, 1, type="lag")]
 temp[,price := shift(price, 1, type="lag")]
 temp[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
@@ -178,6 +222,10 @@ temp[,merchnumless950 := shift(merchnumless950, 1, type="lag")]
 temp[,availability := shift(availability, 1, type="lag")]
 temp[,uv := shift(uv, 1, type="lag")]
 temp[,pv := shift(pv, 1, type="lag")]
+temp[,pv := shift(pv, 1, type="lag")]
+temp[,maxprice := shift(maxprice, 1, type="lag")]
+temp[,minprice := shift(minprice, 1, type="lag")]
+temp[,avgprice := shift(avgprice, 1, type="lag")]
 
 #Time for lags! price, maxprice, minprice, avgprice, cumlogisticscore,cumservicescore,cumorderscore,
 
