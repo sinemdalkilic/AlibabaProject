@@ -205,8 +205,12 @@ tr_sc_brand[brand_id!=609 & sub_category_id==285, avgprice:=mean(price) ,by=.(da
 tr_sc_brand[brand_id!=285 & sub_category_id==250, avgprice:=mean(price) ,by=.(date)]
 
 #adding june 18
-tr_sc_brand[date=="2017-06-18", June18:=1]
-tr_sc_brand[date!="2017-06-18", June18:=0]
+tr_sc_brand[date=="2017-06-18", if_june18:=1]
+tr_sc_brand[date!="2017-06-18", if_june18:=0]
+
+#Chinese New year week
+tr_sc_brand[date=='2017-01-27' | date=='2017-01-28'|date=='2017-01-29' | date=='2017-01-30' | date=='2017-01-31' | date=='2017-02-01' |date=='2017-02-02', if_chinese:=1]
+tr_sc_brand[date!='2017-01-27' && date!='2017-01-28'&& date!='2017-01-29' && date!='2017-01-30' && date!='2017-01-31' && date!='2017-02-01' && date!='2017-02-02', if_chinese:=0]
 
 #specify sub_category_id and brand_id inside the regression model
 #lagged data
