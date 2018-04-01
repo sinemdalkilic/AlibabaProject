@@ -34,7 +34,6 @@ merch_brand=merge(sellers[, .(avg_logistic_review_score, avg_order_quality_score
                   products[, .(date, merchant_id, item_id, brand_id, sub_category_id)], by=c("date", "merchant_id","sub_category_id"))
 
 scores_sc_brand=merch_brand[,.(logisticscore=mean(avg_logistic_review_score,na.rm = TRUE),orderscore=mean(avg_order_quality_score,na.rm = TRUE),servicescore=mean(avg_service_quality_score,na.rm = TRUE)),by=c("date", "brand_id", "sub_category_id")]
-
 tr_sc=merge(scores_sc_brand, tr_sc, by=c("date", "brand_id", "sub_category_id"))
 
 noofsellers_subcat= merch_brand[,.(noofsellerssc=length(unique(merchant_id))),by=c("date", "sub_category_id")]
@@ -56,49 +55,51 @@ ggplot(dummy[quantity<10000],aes(x=date,y=quantity, colour=day, group=day))+geom
 
 
 tr_sc_brand=tr_sc[,.(quantity=sum(quantity),price=mean(price),view=(sum(pvs)/sum(uvs)),logisticscore=mean(logisticscore),
-                     orderscore=mean(orderscore),servicescore=mean(servicescore), availability=sum(availability),merchnumless950,noofsellersbr,noofsellerssc,day,uv=sum(uvs),pv=sum(pvs)),by=.(date, brand_id, sub_category_id)]
+                     orderscore=mean(orderscore),servicescore=mean(servicescore), availability=sum(availability),avgavailability,merchnumless950,noofsellersbr,noofsellerssc,day,uv=sum(uvs),pv=sum(pvs)),by=.(date, brand_id, sub_category_id)]
 
 tr_sc_brand=unique(tr_sc_brand)
-
 
 #tr_sc_brand[day=="Sun", if_Sun:=1]
 #tr_sc_brand[day!="Sun", if_Sun:=0]
 
+tr_sc_brand[day=="Paz", if_Sun:=1]
+tr_sc_brand[day!="Paz", if_Sun:=0]
+
 #tr_sc_brand[day=="Mon", if_Mon:=1]
 #tr_sc_brand[day!="Mon", if_Mon:=0]
 
+tr_sc_brand[day=="Pzt", if_Mon:=1]
+tr_sc_brand[day!="Pzt", if_Mon:=0]
 
 #tr_sc_brand[day=="Tue", if_Tue:=1]
 #tr_sc_brand[day!="Tue", if_Tue:=0]
 
+tr_sc_brand[day=="Sal", if_Tue:=1]
+tr_sc_brand[day!="Sal", if_Tue:=0]
+
 #tr_sc_brand[day=="Wed", if_Wed:=1]
 #tr_sc_brand[day!="Wed", if_Wed:=0]
 
+tr_sc_brand[day=="Çar", if_Wed:=1]
+tr_sc_brand[day!="Çar", if_Wed:=0]
 
 #tr_sc_brand[day=="Thu", if_Thu:=1]
 #tr_sc_brand[day!="Thu", if_Thu:=0]
 
+tr_sc_brand[day=="Per", if_Thu:=1]
+tr_sc_brand[day!="Per", if_Thu:=0]
+
 #tr_sc_brand[day=="Fri", if_Fri:=1]
 #tr_sc_brand[day!="Fri", if_Fri:=0]
 
+tr_sc_brand[day=="Cum", if_Fri:=1]
+tr_sc_brand[day!="Cum", if_Fri:=0]
+
 #tr_sc_brand[day=="Sat", if_Sat:=1]
 #tr_sc_brand[day!="Sat", if_Sat:=0]
-tr_sc_brand[day=="Sun", if_Sun:=1]
-tr_sc_brand[day!="Sun", if_Sun:=0]
 
-tr_sc_brand[day=="Mon", if_Mon:=1]
-tr_sc_brand[day!="Mon", if_Mon:=0]
-
-tr_sc_brand[day=="Tue", if_Tue:=1]
-tr_sc_brand[day!="Tue", if_Tue:=0]
-tr_sc_brand[day=="Wed", if_Wed:=1]
-tr_sc_brand[day!="Wed", if_Wed:=0]
-tr_sc_brand[day=="Thu", if_Thu:=1]
-tr_sc_brand[day!="Thu", if_Thu:=0]
-tr_sc_brand[day=="Fri", if_Fri:=1]
-tr_sc_brand[day!="Fri", if_Fri:=0]
-tr_sc_brand[day=="Sat", if_Sat:=1]
-tr_sc_brand[day!="Sat", if_Sat:=0]
+tr_sc_brand[day=="Cmt", if_Sat:=1]
+tr_sc_brand[day!="Cmt", if_Sat:=0]
 
 
 #dummy=tr_sc_brand[,list(brand_id,sub_category_id),by="date"]
@@ -222,7 +223,7 @@ data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
 data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
 data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
 data[,merchnumless950 := shift(merchnumless950, 1, type="lag")]
-data[,availability := shift(availability, 1, type="lag")]
+data[,availability := shift(avgavailability, 1, type="lag")]
 data[,uv := shift(uv, 1, type="lag")]
 data[,pv := shift(pv, 1, type="lag")]
 data[,pv := shift(pv, 1, type="lag")]
@@ -232,27 +233,15 @@ data[,avgprice := shift(avgprice, 1, type="lag")]
 data[,noofsellerssc := shift(noofsellerssc, 1, type="lag")]
 data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
+
+fit=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit)
+
 #Stepwise Regression
 
-fit=step(lm(formula = quantity~price+uv, data =data))
-# summary(sc_250_fit_step)
-# 
-# #to scale the beg_inv
-#tr_sc_brand[,beg_inv_norm:=scale(beg_inv, center=TRUE, scale=TRUE), by=c("brand_id", "sub_category_id")]
-# 
-# #plot between price and normalized beg_inv
-# ggplot(tr_sc_brand[sub_category_id==250 & brand_id==773,],)+geom_line(aes(date, beg_inv))+geom_line(aes(date, price), color='red')
-# ggplot(tr_sc_brand[sub_category_id==250 & brand_id==773,],)+geom_line(aes(date, beg_inv))
+fit1=lm(formula= quantity~price,data=data)
+summary(fit1)
 
-
-
-# sc_250_fit_=lm(formula = quantity~logisticscore+orderscore+servicescore+price+view+beg_inv+NoOfSellersBr, data = tr_sc_brand[sub_category_id==250 & brand_id==232,])
-# summary(sc_250_fit_)
-
-temp=tr_sc_brand[sub_category_id==250 & brand_id==232,]
-
-
-tr_sc_brand[, mrktpriceSC:= mean(price), by=c("date", "sub_category_id")]
-
-
-inventory[, beg_inv+replen_in+trans_in==0, ]
+fit2=lm(formula= quantity~price+maxprice,data=data)
+summary(fit2)
+anova(fit1,fit2)
