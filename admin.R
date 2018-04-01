@@ -80,8 +80,8 @@ tr_sc_brand[day!="Sal", if_Tue:=0]
 #tr_sc_brand[day=="Wed", if_Wed:=1]
 #tr_sc_brand[day!="Wed", if_Wed:=0]
 
-tr_sc_brand[day=="Çar", if_Wed:=1]
-tr_sc_brand[day!="Çar", if_Wed:=0]
+tr_sc_brand[day=="Ã‡ar", if_Wed:=1]
+tr_sc_brand[day!="Ã‡ar", if_Wed:=0]
 
 #tr_sc_brand[day=="Thu", if_Thu:=1]
 #tr_sc_brand[day!="Thu", if_Thu:=0]
@@ -234,10 +234,30 @@ data[,noofsellerssc := shift(noofsellerssc, 1, type="lag")]
 data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 
+
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1)
 
 fit2=lm(formula= quantity~minprice+cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv,data=data)
+
+# WATCH OUT FORECAST #
+
+temp=data[date>="2017-01-01"& date<="2017-06-30",]
+templeft=data[date>"2017-06-30",]
+dummy=data[date>="2017-01-01"& date<="2017-06-30",quantity]
+ #forecast
+dummyts<-ts(dummy,start = c(2017,1),freq=365)
+plot(dummyts)
+ 
+library(forecast)
+fit2=lm(formula=dummy~minprice+cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv, data=temp)
+predicted<-predict(fit2,templeft)
+plot(predicted)
+lines(data$quantity[181:212],col="blue")
+lines(predicted,col="red")
+
+#####################
+
 summary(fit2)
 anova(fit1,fit2)
 # P-VALUE= 0.01 MI YOKSA 0.05?
@@ -304,8 +324,8 @@ anova(fit2,fit3)
 #accuracy(p)
 
 #Bundan sonrakilerde strateji:
-#Stepten gelenin içindeki en yüksekp-valuelu olanı çıkart. p-value için set edilen limit 
-#anova ve parametre için 0.05
+#Stepten gelenin iÃ§indeki en yÃ¼ksekp-valuelu olanÃ½ Ã§Ã½kart. p-value iÃ§in set edilen limit 
+#anova ve parametre iÃ§in 0.05
 
 data<-unique(tr_sc_brand[sub_category_id==9 & brand_id==609,])
 data[,view := shift(view, 1, type="lag")]
@@ -378,16 +398,16 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1)
-#INTERCEPT İN P VALUESUNUN ÇOK YÜKSEK OLMASI?
+#INTERCEPT ÃN P VALUESUNUN Ã‡OK YÃœKSEK OLMASI?
 
 #Without intercept
 fit2=lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+merchnumless950+if_Mon+if_Thu+noofsellersbr+if_june18+pv+0, data =data) 
 summary(fit2)
 anova(fit1, fit2) #huge p-value 
 
-#Aralarındafark yok demiş oluyoruz ama R^2 çok değişiyor?
+#AralarÃ½ndafark yok demiÃ¾ oluyoruz ama R^2 Ã§ok deÃ°iÃ¾iyor?
 
-#Sadece intercept çıkarttığımız için devam edelim
+#Sadece intercept Ã§Ã½karttÃ½Ã°Ã½mÃ½z iÃ§in devam edelim
 fit3=lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+merchnumless950+if_Mon+noofsellersbr+if_june18+pv+0, data =data) 
 summary(fit3)
 anova(fit2,fit3)
@@ -442,7 +462,7 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1) #ERROR?
-#MAXPRICE NASIL DÖNEBİLİR??!!
+#MAXPRICE NASIL DÃ–NEBÃLÃR??!!
 
 fit2=lm(formula = quantity~avgavailability+merchnumless950+if_Sun+if_Mon+if_Thu+noofsellerssc+if_june18+pv, data =data)
 summary(fit2)
@@ -528,7 +548,7 @@ summary(fit1)
 fit2=lm(formula = quantity~cumlogisticscore+avgavailability+noofsellerssc+if_june18+uv+pv, data =data)
 summary(fit2)
 anova(fit1,fit2)
-#p value çok küçük mecburi devam et diyor ama nasıl devam edeceğiz??
+#p value Ã§ok kÃ¼Ã§Ã¼k mecburi devam et diyor ama nasÃ½l devam edeceÃ°iz??
 
 data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==850,])
 data[,view := shift(view, 1, type="lag")]
@@ -550,7 +570,7 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1) 
-#R^2 ÇOK KÜÇÜK :(
+#R^2 Ã‡OK KÃœÃ‡ÃœK :(
 
 fit2=lm(formula = quantity~cumlogisticscore+cumorderscore+merchnumless950+if_Wed+if_june18+view+pv, data =data)
 summary(fit2)
