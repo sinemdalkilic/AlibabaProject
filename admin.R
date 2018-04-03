@@ -5,10 +5,10 @@ gc()
 require(data.table)
 require(ggplot2)
 
-products<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_products.rds")
-tr<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_tr.rds")
-inventory<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_inventory.rds")
-sellers<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_sellers.rds")
+#products<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_products.rds")
+#tr<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_tr.rds")
+#inventory<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_inventory.rds")
+#sellers<-readRDS("C://Users//Acerr//Desktop//Courses//Current//IE 492//CAT 42-20180218T104859Z-001//CAT 42//cat42_sellers.rds")
 
 tr[,price:=amount/quantity]
 setnames(tr,"day", "date")
@@ -59,47 +59,47 @@ tr_sc_brand=tr_sc[,.(quantity=sum(quantity),price=mean(price),view=(sum(pvs)/sum
 
 tr_sc_brand=unique(tr_sc_brand)
 
-#tr_sc_brand[day=="Sun", if_Sun:=1]
-#tr_sc_brand[day!="Sun", if_Sun:=0]
+tr_sc_brand[day=="Sun", if_Sun:=1]
+tr_sc_brand[day!="Sun", if_Sun:=0]
 
-tr_sc_brand[day=="Paz", if_Sun:=1]
-tr_sc_brand[day!="Paz", if_Sun:=0]
+# tr_sc_brand[day=="Paz", if_Sun:=1]
+# tr_sc_brand[day!="Paz", if_Sun:=0]
 
-#tr_sc_brand[day=="Mon", if_Mon:=1]
-#tr_sc_brand[day!="Mon", if_Mon:=0]
+tr_sc_brand[day=="Mon", if_Mon:=1]
+tr_sc_brand[day!="Mon", if_Mon:=0]
 
-tr_sc_brand[day=="Pzt", if_Mon:=1]
-tr_sc_brand[day!="Pzt", if_Mon:=0]
+# tr_sc_brand[day=="Pzt", if_Mon:=1]
+# tr_sc_brand[day!="Pzt", if_Mon:=0]
 
-#tr_sc_brand[day=="Tue", if_Tue:=1]
-#tr_sc_brand[day!="Tue", if_Tue:=0]
+tr_sc_brand[day=="Tue", if_Tue:=1]
+tr_sc_brand[day!="Tue", if_Tue:=0]
 
-tr_sc_brand[day=="Sal", if_Tue:=1]
-tr_sc_brand[day!="Sal", if_Tue:=0]
-
-#tr_sc_brand[day=="Wed", if_Wed:=1]
-#tr_sc_brand[day!="Wed", if_Wed:=0]
-
-tr_sc_brand[day=="Çar", if_Wed:=1]
-tr_sc_brand[day!="Çar", if_Wed:=0]
-
-#tr_sc_brand[day=="Thu", if_Thu:=1]
-#tr_sc_brand[day!="Thu", if_Thu:=0]
-
-tr_sc_brand[day=="Per", if_Thu:=1]
-tr_sc_brand[day!="Per", if_Thu:=0]
-
-#tr_sc_brand[day=="Fri", if_Fri:=1]
-#tr_sc_brand[day!="Fri", if_Fri:=0]
-
-tr_sc_brand[day=="Cum", if_Fri:=1]
-tr_sc_brand[day!="Cum", if_Fri:=0]
-
-#tr_sc_brand[day=="Sat", if_Sat:=1]
-#tr_sc_brand[day!="Sat", if_Sat:=0]
-
-tr_sc_brand[day=="Cmt", if_Sat:=1]
-tr_sc_brand[day!="Cmt", if_Sat:=0]
+# tr_sc_brand[day=="Sal", if_Tue:=1]
+# tr_sc_brand[day!="Sal", if_Tue:=0]
+# 
+tr_sc_brand[day=="Wed", if_Wed:=1]
+tr_sc_brand[day!="Wed", if_Wed:=0]
+# 
+# tr_sc_brand[day=="??ar", if_Wed:=1]
+# tr_sc_brand[day!="??ar", if_Wed:=0]
+# 
+tr_sc_brand[day=="Thu", if_Thu:=1]
+tr_sc_brand[day!="Thu", if_Thu:=0]
+# 
+# tr_sc_brand[day=="Per", if_Thu:=1]
+# tr_sc_brand[day!="Per", if_Thu:=0]
+# 
+tr_sc_brand[day=="Fri", if_Fri:=1]
+tr_sc_brand[day!="Fri", if_Fri:=0]
+# 
+# tr_sc_brand[day=="Cum", if_Fri:=1]
+# tr_sc_brand[day!="Cum", if_Fri:=0]
+# 
+tr_sc_brand[day=="Sat", if_Sat:=1]
+tr_sc_brand[day!="Sat", if_Sat:=0]
+# 
+# tr_sc_brand[day=="Cmt", if_Sat:=1]
+# tr_sc_brand[day!="Cmt", if_Sat:=0]
 
 
 #dummy=tr_sc_brand[,list(brand_id,sub_category_id),by="date"]
@@ -211,7 +211,7 @@ tr_sc_brand[date!="2017-06-18", if_june18:=0]
 
 #Chinese New year week
 tr_sc_brand[date=='2017-01-27' | date=='2017-01-28'|date=='2017-01-29' | date=='2017-01-30' | date=='2017-01-31' | date=='2017-02-01' |date=='2017-02-02', if_chinese:=1]
-tr_sc_brand[date!='2017-01-27' && date!='2017-01-28'&& date!='2017-01-29' && date!='2017-01-30' && date!='2017-01-31' && date!='2017-02-01' && date!='2017-02-02', if_chinese:=0]
+tr_sc_brand[date!='2017-01-27' & date!='2017-01-28'& date!='2017-01-29' & date!='2017-01-30' & date!='2017-01-31' & date!='2017-02-01' & date!='2017-02-02', if_chinese:=0]
 
 #specify sub_category_id and brand_id inside the regression model
 #lagged data
@@ -226,7 +226,6 @@ data[,merchnumless950 := shift(merchnumless950, 1, type="lag")]
 data[,avgavailability := shift(avgavailability, 1, type="lag")]
 data[,uv := shift(uv, 1, type="lag")]
 data[,pv := shift(pv, 1, type="lag")]
-data[,pv := shift(pv, 1, type="lag")]
 data[,maxprice := shift(maxprice, 1, type="lag")]
 data[,minprice := shift(minprice, 1, type="lag")]
 data[,avgprice := shift(avgprice, 1, type="lag")]
@@ -238,29 +237,31 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1)
 
-fit2=lm(formula= quantity~minprice+cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv,data=data)
+fit3=lm(formula= quantity~minprice+cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv,data=data)
+summary(fit3)
 
 # WATCH OUT FORECAST #
 
 temp=data[date>="2017-01-01"& date<="2017-06-30",]
-templeft=data[date>"2017-06-30",]
+templeft=data[date>"2017-06-30",.(minprice,cumlogisticscore,avgavailability,merchnumless950,if_june18,uv,pv)]
 dummy=data[date>="2017-01-01"& date<="2017-06-30",quantity]
- #forecast
-dummyts<-ts(dummy,start = c(2017,1),freq=365)
-plot(dummyts)
- 
-library(forecast)
+
+#forecast
+
+
+require("forecast")
 fit2=lm(formula=dummy~minprice+cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv, data=temp)
 predicted<-predict(fit2,templeft)
+forecasted<-forecast::forecast(fit2,templeft)
 plot(predicted)
-lines(data$quantity[181:212],col="blue")
-lines(predicted,col="red")
-
+plot(forecasted$mean)
+lines(data$quantity[182:212],col="blue")
+lines(forecasted$mean,col="red")
+forecast::accuracy(forecasted$mean,data$quantity[182:212])
 #####################
 
 summary(fit2)
 anova(fit1,fit2)
-# P-VALUE= 0.01 MI YOKSA 0.05?
 
 fit3=lm(formula= quantity~cumlogisticscore+avgavailability+merchnumless950+if_june18+uv+pv,data=data)
 summary(fit3)
@@ -324,8 +325,8 @@ anova(fit2,fit3)
 #accuracy(p)
 
 #Bundan sonrakilerde strateji:
-#Stepten gelenin içindeki en yüksekp-valuelu olaný çýkart. p-value için set edilen limit 
-#anova ve parametre için 0.05
+#Stepten gelenin i??indeki en y??ksekp-valuelu olan?? ????kart. p-value i??in set edilen limit 
+#anova ve parametre i??in 0.05
 
 data<-unique(tr_sc_brand[sub_category_id==9 & brand_id==609,])
 data[,view := shift(view, 1, type="lag")]
@@ -398,16 +399,16 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1)
-#INTERCEPT ÝN P VALUESUNUN ÇOK YÜKSEK OLMASI?
+#INTERCEPT ??N P VALUESUNUN ??OK Y??KSEK OLMASI?
 
 #Without intercept
 fit2=lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+merchnumless950+if_Mon+if_Thu+noofsellersbr+if_june18+pv+0, data =data) 
 summary(fit2)
 anova(fit1, fit2) #huge p-value 
 
-#Aralarýndafark yok demiþ oluyoruz ama R^2 çok deðiþiyor?
+#Aralar??ndafark yok demi?? oluyoruz ama R^2 ??ok de??i??iyor?
 
-#Sadece intercept çýkarttýðýmýz için devam edelim
+#Sadece intercept ????kartt??????m??z i??in devam edelim
 fit3=lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+merchnumless950+if_Mon+noofsellersbr+if_june18+pv+0, data =data) 
 summary(fit3)
 anova(fit2,fit3)
@@ -462,7 +463,7 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1) #ERROR?
-#MAXPRICE NASIL DÖNEBÝLÝR??!!
+#MAXPRICE NASIL D??NEB??L??R??!!
 
 fit2=lm(formula = quantity~avgavailability+merchnumless950+if_Sun+if_Mon+if_Thu+noofsellerssc+if_june18+pv, data =data)
 summary(fit2)
@@ -548,7 +549,7 @@ summary(fit1)
 fit2=lm(formula = quantity~cumlogisticscore+avgavailability+noofsellerssc+if_june18+uv+pv, data =data)
 summary(fit2)
 anova(fit1,fit2)
-#p value çok küçük mecburi devam et diyor ama nasýl devam edeceðiz??
+#p value ??ok k??????k mecburi devam et diyor ama nas??l devam edece??iz??
 
 data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==850,])
 data[,view := shift(view, 1, type="lag")]
@@ -570,7 +571,7 @@ data[,noofsellersbr := shift(noofsellersbr, 1, type="lag")]
 
 fit1=step(lm(formula = quantity~price+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+merchnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
 summary(fit1) 
-#R^2 ÇOK KÜÇÜK :(
+#R^2 ??OK K??????K :(
 
 fit2=lm(formula = quantity~cumlogisticscore+cumorderscore+merchnumless950+if_Wed+if_june18+view+pv, data =data)
 summary(fit2)
