@@ -83,8 +83,8 @@ tr_sc_brand[day!="Sal", if_Tue:=0]
 #tr_sc_brand[day=="Wed", if_Wed:=1]
 #tr_sc_brand[day!="Wed", if_Wed:=0]
  
-tr_sc_brand[day=="�ar", if_Wed:=1]
-tr_sc_brand[day!="�ar", if_Wed:=0]
+tr_sc_brand[day=="Çar", if_Wed:=1]
+tr_sc_brand[day!="Çar", if_Wed:=0]
  
 #tr_sc_brand[day=="Thu", if_Thu:=1]
 #tr_sc_brand[day!="Thu", if_Thu:=0]
@@ -236,7 +236,7 @@ anova(fit1,fit2) #0.1361 fail to reject
 #fit2 wins
 acf(fit2$residuals)# normality assumption :)
 plot(fit2)
-pairs(quantity~logprice+maxprice+cumservicescore+avgavailability+itemnumless950+noofsellerssc+if_june18+pv,data=data)
+#pairs(quantity~logprice+maxprice+cumservicescore+avgavailability+itemnumless950+noofsellerssc+if_june18+pv,data=data)
 
 # WATCH OUT FORECAST #
 
@@ -275,8 +275,298 @@ fit2=lm(formula= quantity~logprice+cumservicescore+itemnumless950+if_Sun+if_Mon+
 summary(fit2)
 anova(fit1,fit2) #0.1675 fail to reject
 
-fit3=lm(formula= quantity~logprice+cumservicescore+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_chinese+view+pv, data =data)
+fit3=lm(formula= quantity~logprice+cumservicescore+itemnumless950+if_Mon+if_Tue+if_Wed+if_Thu+if_chinese+view+pv, data =data)
 summary(fit3)
+anova(fit2,fit3) #0.4103
 
+fit4=lm(formula= quantity~logprice+cumservicescore+itemnumless950+if_Mon+if_Tue+if_Wed+if_chinese+view+pv, data =data)
+summary(fit4)
+anova(fit3,fit4) #0.4463
+
+#fit4 wins
+acf(fit4$residuals)# normality assumption :)
+plot(fit4)
+
+data<-unique(tr_sc_brand[sub_category_id==9 & brand_id==609,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+itemnumless950+if_Thu+noofsellersbr+if_june18+view+uv+pv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1606
+
+#fit2 wins
 acf(fit2$residuals)# normality assumption :)
 plot(fit2)
+
+data<-unique(tr_sc_brand[sub_category_id==44 & brand_id==609,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+itemnumless950+if_june18+uv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1501
+#fit2 wins
+
+acf(fit2$residuals)
+plot(fit2)
+
+data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==609,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+maxprice+cumorderscore+cumservicescore+itemnumless950+noofsellersbr+if_Wed+if_june18+if_chinese+pv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1586
+
+fit3=lm(formula = quantity~logprice+maxprice+cumorderscore+cumservicescore+itemnumless950+noofsellersbr+if_june18+if_chinese+pv, data =data)
+summary(fit3)
+anova(fit2,fit3) #0.1131
+#fit3 wins
+
+data<-unique(tr_sc_brand[sub_category_id==376 & brand_id==609,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+maxprice+itemnumless950+if_Sun+if_Thu+if_june18+uv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1498
+
+fit3=lm(formula = quantity~logprice+maxprice+itemnumless950+if_Sun+if_june18+uv, data =data)
+summary(fit3)
+anova(fit2,fit3)
+
+fit4=lm(formula = quantity~logprice+maxprice+itemnumless950+if_june18+uv, data =data)
+summary(fit4)
+anova(fit3,fit4) #0.1705
+
+fit5=lm(formula = quantity~logprice+itemnumless950+if_june18+uv, data =data)
+summary(fit5)
+anova(fit4,fit5) #0.1515
+
+#fit5 wins.
+
+data<-unique(tr_sc_brand[sub_category_id==69 & brand_id==773,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+avgavailability+itemnumless950+if_Tue+pv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1668
+
+fit3=lm(formula = quantity~logprice+itemnumless950+if_Tue+pv, data =data)
+summary(fit3)
+anova(fit2,fit3) #0.1542
+
+#fit3 wins
+
+data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==773,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+#fit1 wins
+
+data<-unique(tr_sc_brand[sub_category_id==250 & brand_id==773,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~minprice+cumlogisticscore+cumservicescore+itemnumless950+if_Sun+if_Mon+if_Tue+noofsellerssc+if_june18+uv+pv, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1661
+
+fit3=lm(formula = quantity~minprice+cumlogisticscore+cumservicescore+itemnumless950+if_Sun+if_Mon+if_Tue+if_june18+uv+pv, data =data)
+summary(fit3)
+anova(fit2,fit3) #0.1424
+
+fit4=lm(formula = quantity~minprice+cumlogisticscore+itemnumless950+if_Sun+if_Mon+if_Tue+if_june18+uv+pv, data =data)
+summary(fit4)
+anova(fit3,fit4) #0.1962
+
+fit5=lm(formula = quantity~minprice+itemnumless950+if_Sun+if_Mon+if_Tue+if_june18+uv+pv, data =data)
+summary(fit5)
+anova(fit4,fit5) #0.3554
+
+#fit5 wins
+
+data<-unique(tr_sc_brand[sub_category_id==376 & brand_id==773,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+avgavailability+noofsellersbr+if_june18+pv, data =data)
+summary(fit2)
+anova(fit1,fit2) #2.046e-07
+#fit1 wins
+
+data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==850,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~maxprice+cumlogisticscore+cumorderscore+itemnumless950+if_Wed+if_june18+if_chinese+view, data =data)
+summary(fit2)
+anova(fit1,fit2)
+
+fit3=lm(formula = quantity~maxprice+cumlogisticscore+cumorderscore+itemnumless950+if_Wed+if_chinese+view, data =data)
+summary(fit3)
+anova(fit2,fit3)
+#fit3 wins
+
+data<-unique(tr_sc_brand[sub_category_id==376 & brand_id==659,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+#NAs are problematic even when not in model so I don't use step I perform the analysis manually
+#Let's see Silmeye gönlüm el vermedi :)
+#na.fail(data$logprice) #:)
+#na.fail(data$view[2:88]) #ok
+#na.fail(data$avgavailability[2:88]) #ok
+#na.fail(data$itemnumless950[2:88]) #ok
+#na.fail(data$noofsellersbr[2:88]) #ok
+#na.fail(data$noofsellerssc[2:88]) #ok
+#na.fail(data$uv[2:88])
+#na.fail(data$pv[2:88])
+#na.fail(data$maxprice[2:88])
+#na.fail(data$minprice[2:88])
+#na.fail(data$avgprice[2:88])
+#na.fail(data$if_june18[2:88])
+#na.fail(data$if_chinese[2:88])
+#na.fail(data$if_Mon[2:88])
+#na.fail(data$if_Tue[2:88])
+#na.fail(data$if_Wed[2:88])
+#na.fail(data$if_Thu[2:88])
+#na.fail(data$if_Fri[2:88])
+#na.fail(data$if_Sat[2:88])
+#na.fail(data$if_Sun[2:88])
+data$cumlogisticscore<-NULL
+data$cumservicescore<-NULL
+data$cumorderscore<-NULL
+data$logisticscore<-NULL
+data$servicescore<-NULL
+data$orderscore<-NULL
+data$if_june18<-NULL
+data$if_chinese<-NULL
+data$noofsellersbr<-NULL
+data<-na.omit(data) #Omit ettik
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+view+uv+pv, data =data))
+summary(fit1)
+#fit1 wins
+
+data<-unique(tr_sc_brand[sub_category_id==285 & brand_id==609,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+#anova çalışsın diye 
+data$cumlogisticscore<-NULL
+data$cumservicescore<-NULL
+data$cumorderscore<-NULL
+data$logisticscore<-NULL
+data$servicescore<-NULL
+data$orderscore<-NULL
+data$maxprice<-NULL
+data$minprice<-NULL
+data$avgprice<-NULL
+data<-na.omit(data)
+
+fit1=step(lm(formula = quantity~logprice+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+if_Thu+noofsellerssc+view, data =data)
+summary(fit2)
+anova(fit1,fit2) #0.1075
+
+fit3=lm(formula = quantity~logprice+if_Thu+noofsellerssc, data =data)
+summary(fit3)
+anova(fit2,fit3) #0.1314
+
+#fit3 wins
+
+data<-unique(tr_sc_brand[sub_category_id==250 & brand_id==285,])
+data[,view := shift(view, 1, type="lag")]
+data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
+data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
+data[,cumservicescore := shift(cumservicescore, 1, type="lag")]
+data[,uv := shift(uv, 1, type="lag")]
+data[,pv := shift(pv, 1, type="lag")]
+
+fit1=step(lm(formula = quantity~logprice+maxprice+minprice+avgprice+cumlogisticscore+cumorderscore+cumservicescore+avgavailability+itemnumless950+if_Sun+if_Mon+if_Tue+if_Wed+if_Thu+if_Fri+if_Sat+noofsellerssc+noofsellersbr+if_june18+if_chinese+view+uv+pv, data =data))
+summary(fit1)
+
+fit2=lm(formula = quantity~logprice+minprice+cumorderscore+avgavailability+if_Tue+if_Fri+if_june18+uv, data =data)
+summary(fit2)
+anova(fit1,fit2)
+
+fit3=lm(formula = quantity~logprice+minprice+cumorderscore+avgavailability+if_Tue+if_june18+uv, data =data)
+summary(fit3)
+anova(fit2,fit3)
+
+#fit3 wins
