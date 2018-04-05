@@ -248,15 +248,19 @@ dummy=data[date>="2017-01-01"& date<="2017-06-30",quantity]
 
 require("forecast")
 predicted<-predict(fit2,templeft)
+fit2=lm(formula= quantity~logprice+maxprice+cumservicescore+avgavailability
+        +itemnumless950+noofsellerssc+if_june18+pv,data=temp)
+
 forecasted<-forecast::forecast(fit2,templeft,prediction.interval = TRUE)
 plot(predicted)
-plot(data$date[182:212],forecasted$mean,xlab="date",ylab="quantity",main="Forecasts for July Brand 232 Subcategory 250",ylim=c(0,200))
-points(data$date[182:212],data$quantity[182:212],col="blue")
-lines(data$date[182:212],data$quantity[182:212],col="blue")
+plot(data$date[182:212],forecasted$mean,xlab="date",ylab="quantity"
+     ,main="Forecasts for July Brand 232 Subcategory 250",ylim=c(0,250))
+points(data$date[182:212],data$quantity[182:212],col="red")
+lines(data$date[182:212],data$quantity[182:212],col="red")
 lines(data$date[182:212],forecasted$mean,col="black")
 #lines(forecasted$lower[,2],col="red")
 #lines(forecasted$upper[,2],col="red")
-legend("topleft",lty=1, col = c("blue","black"), c("true values", "forecasted"),seg.len=1)
+legend("topleft",lty=1,box.col =1, col = c("red","black"), c("actual values", "forecasted"),seg.len=0.5)
 forecast::accuracy(forecasted,data$quantity[182:212])
 #####################
 
@@ -375,6 +379,8 @@ anova(fit4,fit5) #0.1515
 #fit5 wins.
 
 data<-unique(tr_sc_brand[sub_category_id==69 & brand_id==773,])
+ggplot(data[ ,.(price), by=.(date, brand_id, sub_category_id)], aes(date, price))+geom_line()+ylab("Price")+ggtitle("Price of Brand 773, Subcategory 69")
+
 data[,view := shift(view, 1, type="lag")]
 data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
 data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
@@ -453,6 +459,8 @@ anova(fit1,fit2) #2.046e-07
 #fit1 wins
 
 data<-unique(tr_sc_brand[sub_category_id==117 & brand_id==850,])
+ggplot(data[ ,.(price), by=.(date, brand_id, sub_category_id)], aes(date,price))+geom_line()+ylab("Price")+ggtitle("Price of Brand 850, Subcategory 117")
+
 data[,view := shift(view, 1, type="lag")]
 data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
 data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
@@ -473,6 +481,8 @@ anova(fit2,fit3)
 #fit3 wins
 
 data<-unique(tr_sc_brand[sub_category_id==376 & brand_id==659,])
+ggplot(data[ ,.(price), by=.(date, brand_id, sub_category_id)], aes(date, price))+geom_line()+ylab("Price")+ggtitle("Price of Brand 659, Subcategory 376")
+
 data[,view := shift(view, 1, type="lag")]
 data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
 data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
@@ -518,6 +528,8 @@ summary(fit1)
 #fit1 wins
 
 data<-unique(tr_sc_brand[sub_category_id==285 & brand_id==609,])
+ggplot(data[ ,.(price), by=.(date, brand_id, sub_category_id)], aes(date, price))+geom_point()+ylab("Price")+ggtitle("Price of Brand 609, Subcategory 285")
+
 data[,view := shift(view, 1, type="lag")]
 data[,cumlogisticscore := shift(cumlogisticscore, 1, type="lag")]
 data[,cumorderscore := shift(cumorderscore, 1, type="lag")]
